@@ -1,0 +1,62 @@
+.card {
+  transition: all 0.2s;
+  border-radius: 10px;
+}
+
+.card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-header {
+  border-radius: 10px 10px 0 0 !important;
+}
+
+.card-header:hover {
+  background-color: #f8f9fa !important;
+}
+
+.nav-pills .nav-link {
+  color: #6c757d;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.badge {
+  font-weight: normal;
+  font-size: 0.8rem;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.text-primary {
+  font-size: 1.2rem;
+}
+
+/* Accordion styling */
+.collapse {
+  transition: all 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .nav-pills {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 0.5rem;
+  }
+  
+  .nav-pills .nav-item {
+    flex: 0 0 auto;
+  }
+} 

@@ -1,0 +1,160 @@
+<div class="container py-5">
+  <!-- Page Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="fw-bold">Customer Support & FAQ</h1>
+      <p class="text-muted">Find answers to common questions or get in touch with our support team.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Left Column: Contact & Support -->
+    <div class="col-lg-4 mb-4">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Contact Support</h5>
+          <div class="mb-4">
+            <div class="d-flex align-items-center mb-3">
+              <i class="fas fa-phone-alt me-3 text-primary"></i>
+              <div>
+                <p class="mb-0 fw-bold">Phone Support</p>
+                <p class="mb-0">+1 (800) 123-4567</p>
+              </div>
+            </div>
+            <div class="d-flex align-items-center mb-3">
+              <i class="fas fa-envelope me-3 text-primary"></i>
+              <div>
+                <p class="mb-0 fw-bold">Email Support</p>
+                <p class="mb-0">support&#64;fashionstore.com</p>
+              </div>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="fas fa-clock me-3 text-primary"></i>
+              <div>
+                <p class="mb-0 fw-bold">Support Hours</p>
+                <p class="mb-0">Monday-Friday: 9am-8pm ET</p>
+                <p class="mb-0">Weekends: 10am-6pm ET</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Request Form -->
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Send Us a Message</h5>
+          <form [formGroup]="supportForm" (ngSubmit)="submitSupportRequest()">
+            <div class="mb-3">
+              <label for="name" class="form-label">Your Name</label>
+              <input type="text" class="form-control" id="name" formControlName="name">
+              <div *ngIf="supportForm.get('name')?.invalid && supportForm.get('name')?.touched" class="text-danger mt-1 small">
+                Name is required
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="email" formControlName="email">
+              <div *ngIf="supportForm.get('email')?.invalid && supportForm.get('email')?.touched" class="text-danger mt-1 small">
+                Please enter a valid email address
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="orderNumber" class="form-label">Order Number (Optional)</label>
+              <input type="text" class="form-control" id="orderNumber" formControlName="orderNumber">
+            </div>
+
+            <div class="mb-3">
+              <label for="subject" class="form-label">Subject</label>
+              <input type="text" class="form-control" id="subject" formControlName="subject">
+              <div *ngIf="supportForm.get('subject')?.invalid && supportForm.get('subject')?.touched" class="text-danger mt-1 small">
+                Subject is required
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="message" class="form-label">Your Message</label>
+              <textarea class="form-control" id="message" rows="5" formControlName="message"></textarea>
+              <div *ngIf="supportForm.get('message')?.invalid && supportForm.get('message')?.touched" class="text-danger mt-1 small">
+                Please enter a message (at least 20 characters)
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Submit Request</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: FAQs -->
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Frequently Asked Questions</h5>
+
+          <!-- Search Bar -->
+          <div class="mb-4">
+            <div class="input-group">
+              <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Search FAQs..." 
+                (input)="onSearch($any($event.target).value)"
+              >
+              <button class="btn btn-outline-secondary" type="button">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Category Tabs -->
+          <div class="mb-4">
+            <ul class="nav nav-pills">
+              <li class="nav-item">
+                <button class="nav-link" 
+                        [class.active]="activeCategoryTab === 'all'"
+                        (click)="setActiveCategory('all')">All</button>
+              </li>
+              <li class="nav-item" *ngFor="let category of faqCategories">
+                <button class="nav-link" 
+                        [class.active]="activeCategoryTab === category"
+                        (click)="setActiveCategory(category)">{{ category }}</button>
+              </li>
+            </ul>
+          </div>
+
+          <!-- FAQ Accordion -->
+          <div class="accordion" id="faqAccordion">
+            <div *ngIf="filteredFaqs.length === 0" class="text-center py-4">
+              <p class="text-muted mb-0">No FAQs match your search criteria.</p>
+            </div>
+
+            <div *ngFor="let faq of filteredFaqs; let i = index" class="card mb-3 border">
+              <div class="card-header bg-white" 
+                   (click)="toggleFaq(faq)" 
+                   style="cursor: pointer;">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0">{{ faq.question }}</h6>
+                  <span class="badge bg-light text-dark">{{ faq.category }}</span>
+                </div>
+              </div>
+              <div class="collapse" [class.show]="faq.isExpanded">
+                <div class="card-body">
+                  <p class="mb-0">{{ faq.answer }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Help Section -->
+          <div class="mt-4 p-3 bg-light rounded">
+            <h6>Still Need Help?</h6>
+            <p class="mb-0">If you couldn't find what you're looking for, please contact our support team using the form or contact information provided.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

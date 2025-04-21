@@ -1,0 +1,25 @@
+/* Footer Styles */
+footer {
+  background-color: #343a40;
+  padding: 2rem 0;
+  color: #f8f9fa;
+}
+
+footer a {
+  color: #adb5bd;
+  transition: color 0.3s;
+}
+
+footer a:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.social-icons a {
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+}
+
+.payment-methods {
+  max-width: 200px;
+} 

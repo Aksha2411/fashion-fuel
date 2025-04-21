@@ -1,0 +1,184 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="mb-4">My Profile</h1>
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="row mb-4">
+    <div class="col-12 text-center">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && userProfile" class="row">
+    <!-- Profile Information -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Personal Information</h5>
+          <button class="btn btn-sm" [class.btn-secondary]="editMode" [class.btn-primary]="!editMode"
+            (click)="toggleEditMode()">
+            {{ editMode ? 'Cancel' : 'Edit' }}
+          </button>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" *ngIf="editMode">
+            <div class="mb-3">
+              <label for="displayName" class="form-label">Name</label>
+              <input type="text" id="displayName" class="form-control" [value]="userProfile.name || ''" readonly>
+              <small class="text-muted">Name cannot be changed</small>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" id="email" class="form-control" [value]="userProfile.email || ''" disabled>
+              <small class="text-muted">Email cannot be changed</small>
+            </div>
+            <div class="mb-3">
+              <label for="phoneNumber" class="form-label">Phone Number</label>
+              <input type="tel" id="phoneNumber" class="form-control" formControlName="phoneNumber">
+              <div *ngIf="profileForm.get('phoneNumber')?.invalid && profileForm.get('phoneNumber')?.touched"
+                class="text-danger mt-1 small">
+                Please enter a valid 10-digit phone number
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">Save Changes</button>
+          </form>
+
+          <!-- View Mode -->
+          <div *ngIf="!editMode">
+            <p><strong>Name:</strong> <span *ngIf="userProfile">{{ userProfile.name || 'Not set' }}</span></p>
+            <p><strong>Email:</strong> <span *ngIf="userProfile">{{ userProfile.email || 'Not set' }}</span></p>
+            <p><strong>Phone:</strong> <span *ngIf="userProfile">{{ userProfile.phoneNumber || 'Not set' }}</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address Book -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">My Addresses</h5>
+          <button *ngIf="!addressFormVisible" class="btn btn-sm btn-primary" (click)="showAddressForm()">
+            Add New Address
+          </button>
+        </div>
+        <div class="card-body">
+          <!-- Address Form -->
+          <form *ngIf="addressFormVisible" [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="mb-4 border p-3 rounded">
+            <h6 class="mb-3">{{ editingAddressIndex !== null ? 'Edit Address' : 'Add New Address' }}</h6>
+            
+            <div class="mb-3">
+              <label for="name" class="form-label">Full Name</label>
+              <input type="text" id="name" class="form-control" formControlName="name">
+              <div *ngIf="addressForm.get('name')?.invalid && addressForm.get('name')?.touched"
+                class="text-danger mt-1 small">
+                Name is required
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="street" class="form-label">Street Address</label>
+              <input type="text" id="street" class="form-control" formControlName="street">
+              <div *ngIf="addressForm.get('street')?.invalid && addressForm.get('street')?.touched"
+                class="text-danger mt-1 small">
+                Street address is required
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="city" class="form-label">City</label>
+                <input type="text" id="city" class="form-control" formControlName="city">
+                <div *ngIf="addressForm.get('city')?.invalid && addressForm.get('city')?.touched"
+                  class="text-danger mt-1 small">
+                  City is required
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="state" class="form-label">State</label>
+                <input type="text" id="state" class="form-control" formControlName="state">
+                <div *ngIf="addressForm.get('state')?.invalid && addressForm.get('state')?.touched"
+                  class="text-danger mt-1 small">
+                  State is required
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="zipCode" class="form-label">ZIP Code</label>
+                <input type="text" id="zipCode" class="form-control" formControlName="zipCode">
+                <div *ngIf="addressForm.get('zipCode')?.invalid && addressForm.get('zipCode')?.touched"
+                  class="text-danger mt-1 small">
+                  Valid ZIP code is required (5-6 digits)
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" id="country" class="form-control" formControlName="country">
+                <div *ngIf="addressForm.get('country')?.invalid && addressForm.get('country')?.touched"
+                  class="text-danger mt-1 small">
+                  Country is required
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary" [disabled]="addressForm.invalid || isSavingAddress">
+                <span *ngIf="isSavingAddress" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                {{ isSavingAddress ? 'Saving...' : 'Save Address' }}
+              </button>
+              <button type="button" class="btn btn-outline-secondary" (click)="hideAddressForm()" [disabled]="isSavingAddress">Cancel</button>
+            </div>
+          </form>
+
+          <!-- Address List -->
+          <div *ngIf="!userProfile.addresses || userProfile.addresses.length === 0" class="text-center py-4">
+            <p class="text-muted">You haven't added any addresses yet.</p>
+            <button *ngIf="!addressFormVisible" class="btn btn-primary" (click)="showAddressForm()">
+              Add Your First Address
+            </button>
+          </div>
+
+          <div *ngIf="userProfile.addresses && userProfile.addresses.length > 0 && !addressFormVisible">
+            <div *ngFor="let address of userProfile.addresses; let i = index" 
+                class="border rounded p-3 mb-3" 
+                [class.border-primary]="isDefaultAddress(i)">
+
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="mb-1">{{ address.name }}</h6>
+                  <p class="mb-1">{{ address.street }}</p>
+                  <p class="mb-1">{{ address.city }}, {{ address.state }} {{ address.zipCode }}</p>
+                  <p class="mb-1">{{ address.country }}</p>
+                  
+                  <div class="mt-2 d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-primary" (click)="showAddressForm(i)" [disabled]="isDeletingAddress">Edit</button>
+                    <button class="btn btn-sm btn-outline-danger" (click)="deleteAddress(i)" [disabled]="isDeletingAddress">
+                      <span *ngIf="isDeletingAddress" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                      Delete
+                    </button>
+                    <button *ngIf="!isDefaultAddress(i)" 
+                            class="btn btn-sm btn-outline-success" 
+                            (click)="setDefaultAddress(i)" [disabled]="isDeletingAddress">
+                      Set as Default
+                    </button>
+                  </div>
+                </div>
+                
+                <span *ngIf="isDefaultAddress(i)" class="badge bg-primary">Default</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,55 @@
+.product-image-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  width: 100%;
+  transition: transform 0.5s;
+}
+
+.product-image:hover {
+  transform: scale(1.05);
+}
+
+.size-buttons .btn {
+  min-width: 45px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.color-btn {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 1px solid #dee2e6;
+  position: relative;
+}
+
+.color-btn.active {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0d6efd;
+}
+
+.ratings .fas {
+  font-size: 0.9rem;
+}
+
+.quantity-container .input-group {
+  margin-top: 10px;
+}
+
+.quantity-container input {
+  font-weight: bold;
+}
+
+.product-meta {
+  padding-top: 15px;
+  border-top: 1px solid #dee2e6;
+}
+
+.tab-content {
+  background-color: #fff;
+  min-height: 200px;
+} 

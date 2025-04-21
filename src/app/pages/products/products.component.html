@@ -1,0 +1,113 @@
+<div class="container">
+  <!-- Page Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="fw-bold">
+        {{ category ? (category | titlecase) + "'s" : "All" }} Products
+      </h1>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/" class="text-decoration-none">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{ category ? (category | titlecase) + "'s Collection" : "All Products" }}
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Filters Sidebar -->
+    <div class="col-lg-3 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Filters</h5>
+          
+          <!-- Search -->
+          <div class="mb-4">
+            <label for="search" class="form-label">Search</label>
+            <div class="input-group">
+              <input 
+                type="text" 
+                class="form-control" 
+                id="search" 
+                placeholder="Search products..."
+                [(ngModel)]="searchTerm"
+              >
+              <button class="btn btn-outline-primary" type="button" (click)="onSearch()">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Price Range -->
+          <div class="mb-4">
+            <label class="form-label">Price Range</label>
+            <div class="d-flex mb-2">
+              <span>₹{{ priceRange[0] }}</span>
+              <span class="ms-auto">₹{{ priceRange[1] }}</span>
+            </div>
+            <div class="range-slider">
+              <!-- In a real Angular app, we'd use a slider component here -->
+              <input 
+                type="range" 
+                class="form-range" 
+                min="0" 
+                max="10000" 
+                step="10" 
+                [value]="priceRange[1]" 
+                (input)="onRangeInput($event)"
+              >
+            </div>
+          </div>
+          
+          <!-- Clear Filters -->
+          <button class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+            Clear Filters
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Products Grid -->
+    <div class="col-lg-9">
+      <!-- Sort and Count -->
+      <div class="row mb-4 align-items-center">
+        <div class="col-sm-6">
+          <p class="m-0 text-muted">Showing {{ filteredProducts.length }} products</p>
+        </div>
+        <div class="col-sm-6 d-flex justify-content-sm-end mt-3 mt-sm-0">
+          <div class="form-group">
+            <select class="form-select" [value]="sortBy" (change)="onSortChange($event)">
+              <option value="featured">Featured</option>
+              <option value="priceLow">Price: Low to High</option>
+              <option value="priceHigh">Price: High to Low</option>
+              <option value="rating">Best Rating</option>
+              <option value="newest">Newest</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Loading Spinner -->
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      
+      <!-- Products -->
+      <div *ngIf="!isLoading" class="row">
+        <div *ngIf="filteredProducts.length === 0" class="col-12 text-center py-5">
+          <div class="alert alert-info">
+            <i class="fas fa-search me-2"></i>No products found matching your criteria.
+          </div>
+        </div>
+        
+        <div *ngFor="let product of filteredProducts" class="col-md-4 col-sm-6 mb-4">
+          <app-product-card [product]="product"></app-product-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

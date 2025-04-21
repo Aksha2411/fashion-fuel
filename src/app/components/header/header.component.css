@@ -1,0 +1,16 @@
+.nav-link:hover {
+  color: #f8f9fa !important;
+  text-decoration: underline;
+}
+
+header {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-link {
+  text-decoration: none;
+}
+
+.badge {
+  font-size: 0.65rem;
+} 

@@ -1,0 +1,64 @@
+<header class="bg-dark text-white py-3">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-3 col-6">
+        <a routerLink="/" class="text-white text-decoration-none fs-4 fw-bold">Fashion Store
+
+          <img src="assets/favicon.png" alt="Fashion Store" class="logo" style="width: 30px; height: 30px;">
+        </a>
+      </div>
+      
+      <div class="col-md-6 d-none d-md-block">
+        <nav>
+          <ul class="nav justify-content-center">
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/products/men">Men</a></li>
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/products/women">Women</a></li>
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/products">All Products</a></li>
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/support">Support</a></li>
+          </ul>
+        </nav>
+      </div>
+      
+      <div class="col-md-3 col-6 text-end">
+        <button class="btn btn-link text-white position-relative me-3" (click)="navigateToCart()">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ cartItemCount }}
+          </span>
+        </button>
+        
+        <!-- Authentication buttons -->
+        <ng-container *ngIf="authService.user$ | async as user; else loginButton">
+          <!-- User is logged in - show logout -->
+          <div class="dropdown d-inline-block me-2">
+            <button class="btn btn-link text-white dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user"></i>
+              <span class="d-none d-md-inline-block ms-1">{{ user.displayName || user.email }}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" routerLink="/profile"><i class="fas fa-user-circle me-2"></i>My Profile</a></li>
+              <li><a class="dropdown-item" routerLink="/orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+              <li><a class="dropdown-item" routerLink="/support"><i class="fas fa-question-circle me-2"></i>Support</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#" (click)="logout(); $event.preventDefault()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
+          </div>
+        </ng-container>
+        
+        <ng-template #loginButton>
+          <!-- User is not logged in - show login -->
+          <button class="btn btn-link text-white d-none d-md-inline-block" (click)="navigateToLogin()">
+            <i class="fas fa-user"></i> Login
+          </button>
+        </ng-template>
+
+        <button class="btn d-md-none text-white" (click)="toggleMenu()">
+          <i class="fas" [ngClass]="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+        </button>
+      </div>
+    </div>
+
+   
+  </div>
+</header> 

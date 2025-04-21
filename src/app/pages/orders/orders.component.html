@@ -1,0 +1,118 @@
+<div class="container mt-4">
+  <!-- Page Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="fw-bold">My Orders</h1>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/" class="text-decoration-none">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Orders</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-danger">
+    <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+    <div class="mt-2">
+      <button class="btn btn-sm btn-outline-danger" (click)="loadOrders()">
+        <i class="fas fa-sync-alt me-1"></i>Try Again
+      </button>
+    </div>
+  </div>
+
+  <!-- No Orders Message -->
+  <div *ngIf="!isLoading && !error && orders.length === 0" class="text-center py-5">
+    <div class="alert alert-info">
+      <i class="fas fa-info-circle me-2"></i>You haven't placed any orders yet.
+    </div>
+    <a routerLink="/products" class="btn btn-primary mt-3">
+      <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+    </a>
+  </div>
+
+  <!-- Orders List -->
+  <div *ngIf="!isLoading && !error && orders.length > 0">
+    <div class="card mb-4" *ngFor="let order of orders">
+      <div class="card-header bg-light d-flex flex-wrap justify-content-between align-items-center">
+        <div class="mb-2 mb-md-0">
+          <span class="fw-bold">Order #{{ order.id }}</span>
+          <span class="text-muted ms-3" *ngIf="order.createdAt">{{ order.createdAt | date:'medium' }}</span>
+        </div>
+        <div>
+          <span class="badge rounded-pill me-2" [ngClass]="getOrderStatusClass(order.status)">
+            {{ order.status | titlecase }}
+          </span>
+          <span class="fw-bold">{{ order.totalAmount | currency }}</span>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <!-- Order Items -->
+        <div class="table-responsive">
+          <table class="table table-borderless">
+            <tbody>
+              <tr *ngFor="let item of order.items" class="align-middle">
+                <td style="width: 80px;">
+                  <img [src]="item.imageUrl" alt="{{ item.productName }}" 
+                       class="img-fluid rounded" style="max-width: 60px;"
+                       onerror="this.src='https://via.placeholder.com/60x60?text=No+Image'">
+                </td>
+                <td>
+                  <h6 class="mb-0">{{ item.productName }}</h6>
+                  <small class="text-muted">
+                    <span *ngIf="item.size">Size: {{ item.size }}</span>
+                    <span *ngIf="item.color">, Color: {{ item.color }}</span>
+                  </small>
+                </td>
+                <td class="text-end">
+                  <div>{{ item.price | currency }}</div>
+                  <small class="text-muted">Qty: {{ item.quantity }}</small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Shipping Address & Details -->
+        <div class="row mt-3">
+          <div class="col-md-6">
+            <h6 class="fw-bold">Shipping Address</h6>
+            <p class="mb-1">{{ order.shippingAddress.name }}</p>
+            <p class="mb-1">{{ order.shippingAddress.street }}</p>
+            <p class="mb-1">
+              {{ order.shippingAddress.city }}, 
+              {{ order.shippingAddress.state }} 
+              {{ order.shippingAddress.zipCode }}
+            </p>
+            <p class="mb-0">{{ order.shippingAddress.country }}</p>
+          </div>
+          <div class="col-md-6 mt-3 mt-md-0">
+            <h6 class="fw-bold">Order Details</h6>
+            <p class="mb-1"><span class="text-muted">Payment Method:</span> 
+              {{ order.paymentMethod === 'credit' ? 'Credit Card' : order.paymentMethod | titlecase }}</p>
+            <p class="mb-1"><span class="text-muted">Status:</span> {{ order.status | titlecase }}</p>
+            <p class="mb-0"><span class="text-muted">Total:</span> <span class="fw-bold">{{ order.totalAmount | currency }}</span></p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-footer bg-white">
+        <!-- Order Actions -->
+        <button *ngIf="order.status !== 'cancelled' && order.status !== 'delivered'" 
+                class="btn btn-outline-danger" 
+                (click)="cancelOrder(order.id || '')">
+          <i class="fas fa-times-circle me-1"></i>Cancel Order
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

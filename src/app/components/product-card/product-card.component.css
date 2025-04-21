@@ -1,0 +1,59 @@
+.product-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.card-title:hover {
+  color: #0d6efd;
+}
+
+.product-img {
+  height: 200px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.5s;
+}
+
+.product-img:hover {
+  transform: scale(1.05);
+}
+
+.size-buttons .btn {
+  min-width: 40px;
+  margin-right: 5px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.color-btn {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 1px solid #dee2e6;
+  position: relative;
+}
+
+.color-btn.active {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0d6efd;
+}
+
+.ratings .fas {
+  font-size: 0.8rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  z-index: 2;
+} 
